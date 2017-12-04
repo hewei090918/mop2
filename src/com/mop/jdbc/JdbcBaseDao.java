@@ -16,7 +16,7 @@ public class JdbcBaseDao {
         String password = null;  
           
         //读取 jdbc.properties 文件  
-        InputStream in = JdbcBaseDao.class.getResourceAsStream("jdbc.properties");  
+        InputStream in = JdbcBaseDao.class.getResourceAsStream("db.properties");  
         Properties properties = new Properties();  
         try {
 			properties.load(in);
