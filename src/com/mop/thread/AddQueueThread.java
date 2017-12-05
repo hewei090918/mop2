@@ -16,16 +16,16 @@ import com.mop.util.Spider;
 public class AddQueueThread implements Runnable {
 
 	LinkedBlockingDeque<String> imgUrlQueue;
-	int count;
+	int index;
 	
-	public AddQueueThread(LinkedBlockingDeque<String> imgUrlQueue, int count) {
+	public AddQueueThread(LinkedBlockingDeque<String> imgUrlQueue, int index) {
 		this.imgUrlQueue = imgUrlQueue;
-		this.count = count;
+		this.index = index;
 	}
 	
 	@Override
 	public void run() {
-		List<String> uList = Spider.packContent(count);
+		List<String> uList = Spider.packContent(index);
 		for(String url: uList) {
 			imgUrlQueue.push(url);
 		}

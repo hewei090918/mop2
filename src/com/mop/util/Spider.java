@@ -12,9 +12,9 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,24 +39,21 @@ public class Spider {
 	 * List<String> 
 	 * <br/>
 	 */
-	public static List<String> packContent(int count) {
+	public static List<String> packContent(int index) {
 		List<String> urlList = new ArrayList<String>();
 		//获取数据库连接
 		Connection conn = (Connection) JdbcBaseDao.getConnection();
-		Statement stmt = null;
+		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			stmt = (Statement) conn.createStatement();
-			String sql = "select * from source";
-//			String sql = "select * from T_WAIT_MATCH";
-			rs = stmt.executeQuery(sql);
+			String sql = "SELECT * from source LIMIT 1 OFFSET ?";
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, index);
+			rs = ps.executeQuery();
 			while(rs.next()) {
-				if(count > 0) {
-					String url = rs.getString(2);
-					System.out.println(url);
-					urlList.add(url);
-				}
-				count--;
+				String url = rs.getString("img_url");
+				System.out.println(url);
+				urlList.add(url);
 			}
 	        
 		}catch (SQLException e) {
@@ -64,7 +61,7 @@ public class Spider {
 		} finally {
 			try {
 				rs.close();
-				stmt.close();
+				ps.close();
 				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -77,11 +74,11 @@ public class Spider {
 	 * 描述：	下载图片地址以http:或ftp:开头的图片 <br/>
 	 * 作者：	HeWei
 	 * @param imgUrl
-	 * @param source 
+	 * @param dist 
 	 * void 
 	 * <br/>
 	 */
-    public static void netImgDownload(String imgUrl, String source) {
+    public static void netImgDownload(String imgUrl, String dist) {
         try {
         	URL url = new URL(imgUrl);
         	URLConnection conn = url.openConnection();
@@ -89,7 +86,7 @@ public class Spider {
 			InputStream is = conn.getInputStream();
             BufferedInputStream bis = new BufferedInputStream(is);
             
-            File f = new File(source);
+            File f = new File(dist);
             OutputStream os = new FileOutputStream(f);
             BufferedOutputStream bos = new BufferedOutputStream(os);
             
@@ -117,13 +114,13 @@ public class Spider {
      * void 
      * <br/>
      */
-    public static void localImgDownload(String imgUrl, String source) {
+    public static void localImgDownload(String imgUrl, String dist) {
     	File file = new File(imgUrl);
 		try {
 			FileInputStream fis = new FileInputStream(file);
 			BufferedInputStream bis = new BufferedInputStream(fis);
 			
-			FileOutputStream fos = new FileOutputStream(new File(source));
+			FileOutputStream fos = new FileOutputStream(new File(dist));
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 			
 			byte[] bt = new byte[1024];
