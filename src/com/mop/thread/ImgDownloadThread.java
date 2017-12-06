@@ -37,12 +37,14 @@ public class ImgDownloadThread implements Runnable {
 					break;
 				}
 				String imgUrl = imgUrlQueue.take();
-				String fileName = imgUrl.split("/")[3];
-				//下载本地图片
+//				http://33.185.128.29:8080//25/DHKK4Q19/2017/11/28/23/310227_DHKK172201579902320171128231810011_10.jpg
+				String[] ss = imgUrl.split("/");
+				String fileName = ss[ss.length-1];
 				String dist = savePath + "/" + fileName;
+				//下载本地图片
 				Spider.localImgDownload(imgUrl, dist);
 				//下载网络图片
-				
+//				Spider.netImgDownload(imgUrl, dist);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				break;

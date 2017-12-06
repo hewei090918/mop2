@@ -46,12 +46,19 @@ public class Spider {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
+			//操作MySql数据库
 			String sql = "SELECT * from source LIMIT 1 OFFSET ?";
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, index);
+			//操作Oracle数据库
+//			String sql = "SELECT * from (select *,rownum as num from T_WAIT_MATCH) where num = ?";
+//			ps = conn.prepareStatement(sql);
+//			ps.setInt(1, index);
+			
 			rs = ps.executeQuery();
 			while(rs.next()) {
 				String url = rs.getString("img_url");
+//				String url = rs.getString("UPIMGURL");
 				System.out.println(url);
 				urlList.add(url);
 			}
