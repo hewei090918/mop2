@@ -9,8 +9,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
 import java.net.URL;
+import java.net.URLConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -88,17 +88,17 @@ public class Spider {
     public static void netImgDownload(String imgUrl, String dist) {
         try {
         	//导出图片添加对网络路径的支持
-        	InputStream is = null;
-        	if(imgUrl.startsWith("http")) {
-        		is = new URL(URI.create(imgUrl).toASCIIString()).openStream();
-        	}else if(imgUrl.startsWith("ftp")) {
-        		File file = new File(imgUrl);
-        		is = new FileInputStream(file);
-        	}
-//        	URL url = new URL(imgUrl);
-//        	URLConnection conn = url.openConnection();
+//        	InputStream is = null;
+//        	if(imgUrl.startsWith("http")) {
+//        		is = new URL(URI.create(imgUrl).toASCIIString()).openStream();
+//        	}else if(imgUrl.startsWith("ftp")) {
+//        		File file = new File(imgUrl);
+//        		is = new FileInputStream(file);
+//        	}
+        	URL url = new URL(imgUrl);
+        	URLConnection conn = url.openConnection();
         	
-//			InputStream is = conn.getInputStream();
+			InputStream is = conn.getInputStream();
 			
             BufferedInputStream bis = new BufferedInputStream(is);
             
