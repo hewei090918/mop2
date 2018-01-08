@@ -24,7 +24,9 @@ public class Main {
 		long start = System.currentTimeMillis();
 		//newFixedThreadPool创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待
         ExecutorService addExecutor = Executors.newFixedThreadPool(3);//线程池大小为3
-        int total = 20;//一共下载N张图片
+        
+        int total = 200;//一共下载N张图片
+        
         for(int index = 0; index < total; index++) {
         	addExecutor.execute(new AddQueueThread(imgUrlQueue, index));//将第index张图片地址放入队列
         }
