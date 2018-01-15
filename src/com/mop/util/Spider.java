@@ -33,13 +33,12 @@ public class Spider {
 	 * 
 	 * 描述：	连接数据库并提取数据库里的图片地址 <br/>
 	 * 作者：	HeWei
-	 * @param content
-	 * @param count
+	 * @param offset 数据库中记录偏移量
 	 * @return 
 	 * List<String> 
 	 * <br/>
 	 */
-	public static List<String> packContent(int index) {
+	public static List<String> packContent(int offset) {
 		List<String> urlList = new ArrayList<String>();
 		//获取数据库连接
 		Connection conn = (Connection) JdbcBaseDao.getConnection();
@@ -49,11 +48,11 @@ public class Spider {
 			//操作MySql数据库
 			String sql = "SELECT * from source LIMIT 1 OFFSET ?";
 			ps = conn.prepareStatement(sql);
-			ps.setInt(1, index);
+			ps.setInt(1, offset);
 			//操作Oracle数据库
-//			String sql = "SELECT * from (select *,rownum as num from T_WAIT_MATCH) where num = ?";
+//			String sql = "SELECT * from (select t.*,rownum as num from T_WAIT_MATCH t) where num = ?";
 //			ps = conn.prepareStatement(sql);
-//			ps.setInt(1, index);
+//			ps.setInt(1, offset);
 			
 			rs = ps.executeQuery();
 			while(rs.next()) {
@@ -99,7 +98,6 @@ public class Spider {
         	URLConnection conn = url.openConnection();
         	
 			InputStream is = conn.getInputStream();
-			
             BufferedInputStream bis = new BufferedInputStream(is);
             
             File f = new File(dist);
