@@ -51,7 +51,7 @@ public class Main {
         
         if(imgExecutor.isShutdown()) {
         	long end = System.currentTimeMillis();
-    		System.out.println("一共下载[" + total + "]张图片，共耗时：" + (float)(end - start) / 1000 + " s");
+    		System.out.println("一共下载[" + total + "]张图片，一共耗时：" + (float)(end - start) / 1000 + " s");
         }
 	}
 
